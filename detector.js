@@ -54,6 +54,6 @@ class WebGLDetector {
       parent.appendChild(element);
     }
 
-    return false;
+    return element;
   }
 }
