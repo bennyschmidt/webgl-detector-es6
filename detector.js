@@ -11,14 +11,26 @@ const noSupportHelpText = 'Learn how to enable WebGL in your browser: http://get
 const noSupportBrowser = [noSupportBrowserText, noSupportHelpText].join('\n');
 const noSupportGfx = [noSupportGfxText, noSupportHelpText].join('\n');
 
+const element = document.createElement('div');
+
+element.style.background = '#fff';
+element.style.color = '#000';
+element.style.fontFamily = 'monospace';
+element.style.fontSize = '13px';
+element.style.fontWeight = 'normal';
+element.style.margin = '5em auto 0';
+element.style.padding = '1.5em';
+element.style.textAlign = 'center';
+element.style.width = '400px';
+
 class WebGLDetector {
   constructor() {
-    this.features = {
-      canvas: Boolean(window.CanvasRenderingContext2D),
-      fileapi: Boolean(window.File && window.FileReader && window.FileList && window.Blob)
+    this.support = {
+      canvas2D: Boolean(window.CanvasRenderingContext2D),
+      fileApi: Boolean(window.File && window.FileReader && window.FileList && window.Blob)
     };
 
-    this.render.bind(this);
+    this.alert.call(this);
   }
 
   get isWebGLEnabled() {
@@ -31,28 +43,17 @@ class WebGLDetector {
     }
   }
 
-  render(props) {
+  alert(props = {}) {
     const { isWebGLEnabled } = this;
-
-    const element = document.createElement('div');
-    const parameters = props || {};
-    const parent = parameters.parent !== undefined ? parameters.parent : document.body;
-    const id = parameters.id !== undefined ? parameters.id : 'oldie';
+    const parent = props.parent !== undefined ? props.parent : document.body;
+    const id = props.id !== undefined ? props.id : 'oldie';
 
     if (!isWebGLEnabled) {
       element.id = id;
       element.innerHTML = window.WebGLRenderingContext ? noSupportBrowser : noSupportGfx;
-      element.style.fontFamily = 'monospace';
-      element.style.fontSize = '13px';
-      element.style.fontWeight = 'normal';
-      element.style.textAlign = 'center';
-      element.style.background = '#fff';
-      element.style.color = '#000';
-      element.style.padding = '1.5em';
-      element.style.width = '400px';
-      element.style.margin = '5em auto 0';
+      parent.appendChild(element);
     }
 
-    parent.appendChild(element);
+    return false;
   }
 }
